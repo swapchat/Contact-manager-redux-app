@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { addContact, updateContact } from "../actions/contactActions";
+import { v4 as uuidv4 } from "uuid";
+import { addContact, updateContact } from "../reducers/contactReducer";
 
 const ContactForm = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id } = useParams();
   const [contact, setContact] = useState({
     name: "",
     email: "",
@@ -63,7 +64,7 @@ const ContactForm = () => {
     if (id) {
       dispatch(updateContact(contact));
     } else {
-      dispatch(addContact(contact));
+      dispatch(addContact({ ...contact, id: uuidv4() }));
     }
     navigate("/");
   };
@@ -73,6 +74,7 @@ const ContactForm = () => {
       setContact(initialContact);
     }
   }, [initialContact]);
+
   return (
     <Form className="contact-form" onSubmit={handleSubmit}>
       <Form.Group className="mb-3" controlId="name">

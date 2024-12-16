@@ -1,7 +1,7 @@
 import { Alert, Button, ButtonGroup, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteContact } from "../actions/contactActions";
+import { deleteContact } from "../reducers/contactReducer";
 
 const ContactList = () => {
   const navigate = useNavigate();

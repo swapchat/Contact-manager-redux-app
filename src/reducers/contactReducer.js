@@ -1,38 +1,30 @@
-import {
-  ADD_CONTACT,
-  DELETE_CONTACT,
-  UPDATE_CONTACT,
-} from "../utils/constants";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   data: [],
 };
 
-const contactReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case ADD_CONTACT:
-      return {
-        ...state,
-        data: [...state.data, action.contact],
-      };
+const contactSlice = createSlice({
+  name: "contacts",
+  initialState,
+  reducers: {
+    addContact: (state, action) => {
+      state.data.push({ ...action.payload, id: action.payload.id });
+    },
+    deleteContact: (state, action) => {
+      state.data = state.data.filter((item) => item.id !== action.payload);
+    },
+    updateContact: (state, action) => {
+      const index = state.data.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.data[index] = action.payload;
+      }
+    },
+  },
+});
 
-    case DELETE_CONTACT:
-      return {
-        ...state,
-        data: state.data.filter((item) => item.id !== action.id),
-      };
-
-    case UPDATE_CONTACT:
-      return {
-        ...state,
-        data: state.data.map((item) =>
-          item.id === action.contact.id ? action.contact : item
-        ),
-      };
-
-    default:
-      return state;
-  }
-};
-
-export default contactReducer;
+export const { addContact, deleteContact, updateContact } =
+  contactSlice.actions;
+export default contactSlice.reducer;
